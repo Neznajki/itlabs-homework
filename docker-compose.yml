@@ -1,22 +1,24 @@
-version: "3.0"
+version: "3.1"
 services:
     tournament-service:
-        hostname: tournament-service
+        hostname: tournament-service.local.net
         container_name: tournament-service
-        network_mode: host
-        user: ${UID}
+#        network_mode: host
+        user: developer
         build:
             ./.docker
         ports:
-            - "80:80"
-        expose:
-          - 80
+            - 80
+        dns:
+            - 8.8.8.8
+            - 10.252.252.252
         volumes:
             - ./:/www/default:cached
             - $HOME/.composer:$HOME/.composer:cached
             - /opt/phpstorm-coverage/:/opt/phpstorm-coverage/:cached
 
         environment:
+            - VIRTUAL_HOST=tournament-service.local.net
             - DOCKER_USER_ID=${UID:-1000}
             - DOCKER_USER_GID=${DOCKER_USER_GID:-1000}
             - APACHE_DOCUMENT_ROOT=/www/default/public
@@ -26,7 +28,7 @@ services:
             - mysql-tournament
 
     mysql-tournament:
-        hostname: mysql-tournament
+        hostname: mysql-tournament.local.net
         image: mysql:5.7
         container_name: mysql-tournament
         # restart can be removed
@@ -48,3 +50,8 @@ services:
         volumes:
             - /docker-common-meta-files/mysql/tournament:/var/lib/mysql:cached
             # please define cache folder for database metadata (to preserve state)
+
+networks:
+    default:
+        external:
+            name: local.net

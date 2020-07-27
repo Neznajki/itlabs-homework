@@ -133,13 +133,13 @@ final class Version20200725064037 extends AbstractMigration
     constraint play_of_match_play_of_steps_id_fk
         foreign key (play_of_step_id) references play_of_steps (id)
 );");
-        $this->addSql("INSERT IGNORE INTO tournament.play_of_steps (name, match_count) VALUES
+        $this->addSql("INSERT IGNORE INTO play_of_steps (name, match_count) VALUES
  ('Finals', 1),
  ('Semi Finals', 2),
  ('Quarter Finals', 4),
  ('1/8', 8)
  ");
-        $this->addSql("INSERT IGNORE INTO tournament.team (name, strength) VALUES ('Rimi', 50),
+        $this->addSql("INSERT IGNORE INTO team (name, strength) VALUES ('Rimi', 50),
 ('Maxima', 50),
 ('Pepco', 50),
 ('LIDL', 50),
@@ -171,6 +171,10 @@ final class Version20200725064037 extends AbstractMigration
 ('CI', 50),
 ('Container', 50),
 ('Validator', 50);");
+
+        $this->addSql(
+            "INSERT INTO division (name) VALUES ('Division A'), ('Division B')"
+        );
     }
 
     public function down(Schema $schema) : void
