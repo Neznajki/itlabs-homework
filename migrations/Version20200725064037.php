@@ -23,7 +23,7 @@ final class Version20200725064037 extends AbstractMigration
 (
     id      int auto_increment
         primary key,
-    name    int       null,
+    name    varchar(64)      null,
     created timestamp null,
     constraint challenge_name_uindex
         unique (name)

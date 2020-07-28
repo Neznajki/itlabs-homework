@@ -2,13 +2,15 @@
 
 namespace App\Entity;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * ChallengeDivisionTeam
  *
  * @ORM\Table(name="challenge_division_team", uniqueConstraints={@ORM\UniqueConstraint(name="challenge_division_team_team_id_uindex", columns={"team_id"}), @ORM\UniqueConstraint(name="challenge_division_team_challenge_division_id_uindex", columns={"challenge_division_id"})})
- * @ORM\Entity(repositoryClass="App\Repository\ChallengeDivisionRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\ChallengeDivisionTeamRepository")
  */
 class ChallengeDivisionTeam
 {
@@ -22,14 +24,14 @@ class ChallengeDivisionTeam
     private $id;
 
     /**
-     * @var \DateTime|null
+     * @var DateTime|null
      *
      * @ORM\Column(name="assigned", type="datetime", nullable=true)
      */
     private $assigned;
 
     /**
-     * @var \ChallengeDivision
+     * @var ChallengeDivision
      *
      * @ORM\ManyToOne(targetEntity="ChallengeDivision")
      * @ORM\JoinColumns({
@@ -39,7 +41,7 @@ class ChallengeDivisionTeam
     private $challengeDivision;
 
     /**
-     * @var \Team
+     * @var Team
      *
      * @ORM\ManyToOne(targetEntity="Team")
      * @ORM\JoinColumns({
@@ -53,12 +55,12 @@ class ChallengeDivisionTeam
         return $this->id;
     }
 
-    public function getAssigned(): ?\DateTimeInterface
+    public function getAssigned(): ?DateTimeInterface
     {
         return $this->assigned;
     }
 
-    public function setAssigned(?\DateTimeInterface $assigned): self
+    public function setAssigned(?DateTimeInterface $assigned): self
     {
         $this->assigned = $assigned;
 

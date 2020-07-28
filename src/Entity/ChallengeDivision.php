@@ -22,7 +22,7 @@ class ChallengeDivision
     private $id;
 
     /**
-     * @var \Challenge
+     * @var Challenge
      *
      * @ORM\ManyToOne(targetEntity="Challenge")
      * @ORM\JoinColumns({
@@ -32,7 +32,7 @@ class ChallengeDivision
     private $challenge;
 
     /**
-     * @var \Division
+     * @var Division
      *
      * @ORM\ManyToOne(targetEntity="Division")
      * @ORM\JoinColumns({

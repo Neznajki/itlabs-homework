@@ -5,10 +5,10 @@
         {% for playOf in playOfs %}
             <div class="input-group-prepend">
                 <div class="input-group-text">
-                    <input id="play_of_{{ playOf.id }}" name="playOfType" type="radio" data-games="{{ playOf.matchCount }}">
+                    <input id="play_of_{{ playOf.id }}" name="playOfType" type="radio" data-games="{{ playOf.matchCount }}" {% if playOf.matchCount == 4 %} checked="checked" {% endif %}>
                 </div>
             </div>
-            <label for="play_of_{{ playOf.id }}" class="form-control" disabled=disabled aria-label="{{ playOf.name }}">{{ playOf.name }}</label>
+            <label for="play_of_{{ playOf.id }}" class="form-control" aria-label="{{ playOf.name }}">{{ playOf.name }}</label>
         {% endfor %}
     </div>
 
@@ -21,9 +21,12 @@
                         <input id="team_{{ team.id }}" type="checkbox" checked="checked" name="teams" value="{{ team.id }}">
                     </div>
                 </div>
-                <label for="team_{{ team.id }}" class="form-control" disabled=disabled aria-label="{{ team.name }}">{{ team.name }}</label>
+                <label for="team_{{ team.id }}" class="form-control" aria-label="{{ team.name }}">{{ team.name }}</label>
             </div>
         {% endfor %}
     </div>
     <center><button id="submitTeamCreate" class="btn btn-success">save</button></center>
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('js/createChallenge.js') }}"></script>
 {% endblock %}

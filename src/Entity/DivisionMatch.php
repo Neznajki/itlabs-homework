@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -29,21 +31,21 @@ class DivisionMatch
     private $teamAWin;
 
     /**
-     * @var \DateTime|null
+     * @var DateTime|null
      *
      * @ORM\Column(name="created", type="datetime", nullable=true)
      */
     private $created;
 
     /**
-     * @var \DateTime|null
+     * @var DateTime|null
      *
      * @ORM\Column(name="resulted", type="datetime", nullable=true)
      */
     private $resulted;
 
     /**
-     * @var \ChallengeDivisionTeam
+     * @var ChallengeDivisionTeam
      *
      * @ORM\ManyToOne(targetEntity="ChallengeDivisionTeam")
      * @ORM\JoinColumns({
@@ -53,7 +55,7 @@ class DivisionMatch
     private $teamA;
 
     /**
-     * @var \ChallengeDivisionTeam
+     * @var ChallengeDivisionTeam
      *
      * @ORM\ManyToOne(targetEntity="ChallengeDivisionTeam")
      * @ORM\JoinColumns({
@@ -79,24 +81,24 @@ class DivisionMatch
         return $this;
     }
 
-    public function getCreated(): ?\DateTimeInterface
+    public function getCreated(): ?DateTimeInterface
     {
         return $this->created;
     }
 
-    public function setCreated(?\DateTimeInterface $created): self
+    public function setCreated(?DateTimeInterface $created): self
     {
         $this->created = $created;
 
         return $this;
     }
 
-    public function getResulted(): ?\DateTimeInterface
+    public function getResulted(): ?DateTimeInterface
     {
         return $this->resulted;
     }
 
-    public function setResulted(?\DateTimeInterface $resulted): self
+    public function setResulted(?DateTimeInterface $resulted): self
     {
         $this->resulted = $resulted;
 

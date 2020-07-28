@@ -51,4 +51,9 @@ class ChallengeController extends AbstractController
             ]
         );
     }
+
+    public function startAction()
+    {
+
+    }
 }

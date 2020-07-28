@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -22,14 +24,14 @@ class Challenge
     private $id;
 
     /**
-     * @var int|null
+     * @var string|null
      *
-     * @ORM\Column(name="name", type="integer", nullable=true)
+     * @ORM\Column(name="name", type="string", nullable=true)
      */
     private $name;
 
     /**
-     * @var \DateTime|null
+     * @var DateTime|null
      *
      * @ORM\Column(name="created", type="datetime", nullable=true)
      */
@@ -40,24 +42,24 @@ class Challenge
         return $this->id;
     }
 
-    public function getName(): ?int
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function setName(?int $name): self
+    public function setName(string $name): self
     {
         $this->name = $name;
 
         return $this;
     }
 
-    public function getCreated(): ?\DateTimeInterface
+    public function getCreated(): ?DateTimeInterface
     {
         return $this->created;
     }
 
-    public function setCreated(?\DateTimeInterface $created): self
+    public function setCreated(?DateTimeInterface $created): self
     {
         $this->created = $created;
 

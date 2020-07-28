@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Challenge;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -17,6 +19,18 @@ class ChallengeRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Challenge::class);
+    }
+
+    /**
+     * @param Challenge $challengeEntity
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function save(Challenge $challengeEntity)
+    {
+        $this->getEntityManager()->persist($challengeEntity);
+        $this->getEntityManager()->flush($challengeEntity);
+
     }
 
     // /**

@@ -22,7 +22,7 @@ class ChallengePlayOfStep
     private $id;
 
     /**
-     * @var \Challenge
+     * @var Challenge
      *
      * @ORM\ManyToOne(targetEntity="Challenge")
      * @ORM\JoinColumns({
@@ -32,7 +32,7 @@ class ChallengePlayOfStep
     private $challenge;
 
     /**
-     * @var \PlayOfSteps
+     * @var PlayOfSteps
      *
      * @ORM\ManyToOne(targetEntity="PlayOfSteps")
      * @ORM\JoinColumns({
