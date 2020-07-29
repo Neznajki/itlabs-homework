@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Challenge;
 use App\Entity\ChallengeDivision;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
@@ -19,6 +20,15 @@ class ChallengeDivisionRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ChallengeDivision::class);
+    }
+
+    /**
+     * @param Challenge $challenge
+     * @return ChallengeDivision[]
+     */
+    public function getByChallenge(Challenge $challenge): array
+    {
+        return $this->findBy(['challenge' => $challenge]);
     }
 
     /**

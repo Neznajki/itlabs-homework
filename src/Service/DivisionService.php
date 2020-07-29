@@ -8,6 +8,7 @@ namespace App\Service;
 use App\Entity\Challenge;
 use App\Entity\ChallengeDivision;
 use App\Entity\ChallengeDivisionTeam;
+use App\Entity\DivisionMatch;
 use App\Entity\Team;
 use App\Repository\ChallengeDivisionRepository;
 use App\Repository\ChallengeDivisionTeamRepository;
@@ -45,6 +46,34 @@ class DivisionService
         $this->challengeDivisionTeamRepository = $challengeDivisionTeamRepository;
         $this->divisionMatchService = $divisionMatchService;
     }
+
+    /**
+     * @param Challenge $challenge
+     * @return ChallengeDivision[]
+     */
+    public function getDivisionsByChallenge(Challenge $challenge): array
+    {
+        return $this->challengeDivisionRepository->getByChallenge($challenge);
+    }
+
+    /**
+     * @param ChallengeDivision $challengeDivision
+     * @return DivisionMatch[]
+     */
+    public function getDivisionMatchesByChallengeDivision(ChallengeDivision $challengeDivision): array
+    {
+        return $this->divisionMatchService->getDivisionMatches($challengeDivision);
+    }
+
+    /**
+     * @param ChallengeDivision $challengeDivision
+     * @return ChallengeDivisionTeam[]
+     */
+    public function getTeamsByChallengeDivision(ChallengeDivision $challengeDivision): array
+    {
+        return $this->challengeDivisionTeamRepository->getTeamsByChallengeDivision($challengeDivision);
+    }
+
 
     /**
      * @param Challenge $challenge

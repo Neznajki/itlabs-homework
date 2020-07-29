@@ -53,7 +53,26 @@ class ChallengeService
 
     public function getExistingChallengeData(int $challengeId): ChallengeData
     {
-        return new ChallengeData();
+        $challenge = $this->challengeRepository->find($challengeId);
+
+        if ($challenge == null) {
+            throw new InvalidArgumentException("challenge with id {$challengeId} not found");
+        }
+
+        $divisions = $this->divisionService->getDivisionsByChallenge($challenge);
+
+        $result = new ChallengeData();
+
+        foreach ($divisions as $division) {
+            $result->setDivisionTeams(
+                $division,
+                $this->divisionService->getTeamsByChallengeDivision($division)
+            );
+
+            $result->setDivisionMatches($division, $this->divisionService->getDivisionMatchesByChallengeDivision($division));
+        }
+
+        return $result;
     }
 
     /**

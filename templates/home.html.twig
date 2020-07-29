@@ -12,13 +12,11 @@
     </tr>
     </thead>
         {% for challenge in challenges %}
-            <a href="{{ path('challenge_display', {'challengeId': challenge.id}) }}">
-                <tr>
-                    <td>{{ challenge.id }}</td>
-                    <td>{{ challenge.name }}</td>
-                    <td>{{ challenge.created }}</td>
+                <tr class="">
+                    <td><a href="{{ path('challenge_display', {'challengeId': challenge.id}) }}">{{ challenge.id }}</a></td>
+                    <td><a href="{{ path('challenge_display', {'challengeId': challenge.id}) }}">{{ challenge.name }}</a></td>
+                    <td>{{ challenge.created.format('Y-m-d H:i:s') }}</td>
                 </tr>
-            </a>
         {% endfor %}
     </table>
 {% endblock %}

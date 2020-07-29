@@ -75,4 +75,9 @@ class Challenge implements JsonSerializable
             'created' => $this->getCreated(),
         ];
     }
+
+    public function __toString(): string
+    {
+        return $this->getName();
+    }
 }

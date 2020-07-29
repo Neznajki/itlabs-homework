@@ -6,12 +6,14 @@ namespace App\Service;
 
 
 use App\Entity\ChallengeDivision;
+use App\Entity\ChallengeDivisionTeam;
 use App\Entity\DivisionMatch;
 use App\Repository\ChallengeDivisionTeamRepository;
 use App\Repository\DivisionMatchRepository;
 use DateTime;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Symfony\Component\Form\Exception\InvalidArgumentException;
 
 class DivisionMatchService
 {
@@ -34,6 +36,40 @@ class DivisionMatchService
     }
 
     /**
+     * @param int $matchId
+     * @return DivisionMatch
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function calculateMatch(int $matchId): DivisionMatch
+    {
+        $match = $this->divisionMatchRepository->find($matchId);
+
+        if ($match == null) {
+            throw new InvalidArgumentException("division match {$matchId} not found");
+        }
+
+        if ($match->getTeamAWin() !== null) {
+            throw new \InvalidArgumentException("division match {$matchId} already have results");
+        }
+
+        $teamAStrength = $match->getTeamA()->getTeam()->getStrength();
+        $maxNumber = $teamAStrength + $match->getTeamB()->getTeam()->getStrength();
+        $random = rand(1, $maxNumber);
+
+        if ($random <= $teamAStrength) {
+            $match->setTeamAWin(true);
+        } else {
+            $match->setTeamAWin(false);
+        }
+        $match->setResulted(new DateTime());
+
+        $this->divisionMatchRepository->save($match);
+
+        return $match;
+    }
+
+    /**
      * @param ChallengeDivision $challengeDivision
      * @throws ORMException
      * @throws OptimisticLockException
@@ -48,23 +84,46 @@ class DivisionMatchService
                 if ($teamA->getId() == $teamB->getId()) {
                     continue;
                 }
-                $index = "{$teamA->getId()}_{$teamB->getId()}";
-                $reverseIndex = "{$teamB->getId()}_{$teamA->getId()}";
 
+                $reverseIndex = "{$teamB->getId()}_{$teamA->getId()}";
                 if (array_key_exists($reverseIndex, $createdMatches)) {
                     continue;
                 }
 
-                $divisionMatch = new DivisionMatch();
-
-                $divisionMatch->setTeamA($teamA);
-                $divisionMatch->setTeamB($teamB);
-                $divisionMatch->setCreated(new DateTime());
-
-                $this->divisionMatchRepository->save($divisionMatch);
+                $index = "{$teamA->getId()}_{$teamB->getId()}";
+                $divisionMatch = $this->createDivisionMatch($teamA, $teamB);
 
                 $createdMatches[$index] = $divisionMatch;
             }
         }
+    }
+
+    /**
+     * @param ChallengeDivision $challengeDivision
+     * @return DivisionMatch[]
+     */
+    public function getDivisionMatches(ChallengeDivision $challengeDivision): array
+    {
+        return $this->divisionMatchRepository->getMatchesByChallengeDivision($challengeDivision);
+    }
+
+    /**
+     * @param ChallengeDivisionTeam $teamA
+     * @param ChallengeDivisionTeam $teamB
+     * @return DivisionMatch
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    protected function createDivisionMatch(ChallengeDivisionTeam $teamA, ChallengeDivisionTeam $teamB): DivisionMatch
+    {
+        $divisionMatch = new DivisionMatch();
+
+        $divisionMatch->setTeamA($teamA);
+        $divisionMatch->setTeamB($teamB);
+        $divisionMatch->setCreated(new DateTime());
+
+        $this->divisionMatchRepository->save($divisionMatch);
+
+        return $divisionMatch;
     }
 }

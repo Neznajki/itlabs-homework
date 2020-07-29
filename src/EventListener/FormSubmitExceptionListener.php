@@ -11,14 +11,22 @@ use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 
 class FormSubmitExceptionListener
 {
+    /**
+     * @param ExceptionEvent $event
+     */
     public function onKernelException(ExceptionEvent $event)
     {
-        if (! $event->getThrowable() instanceof InvalidArgumentException) {
+        if ($event->getRequest()->headers->get('accepts') !== 'application/json') {
             return;
         }
 
-        $response = new JsonResponse(['message' => $event->getThrowable()->getMessage()], 500);
+        if ($event->getThrowable() instanceof InvalidArgumentException) {
+            $response = new JsonResponse(['message' => $event->getThrowable()->getMessage()], 500);
 
-        $event->setResponse($response);
+            $event->setResponse($response);
+            return;
+        }
+
+        //keep standard symfony output on unknown error
     }
 }

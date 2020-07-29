@@ -28,6 +28,7 @@ RUN apt-get install -y \
       php7.4-xmlrpc \
       php7.4-xsl \
       php7.4-zip \
+      php7.4-intl \
       php-redis
 
 ENV USER=developer USER_ID=1000 USER_GID=1000
@@ -89,7 +90,8 @@ RUN sed -ri 's/^display_errors\s*=\s*Off/display_errors = On/g' /etc/php/7.4/apa
     echo "xdebug.profiler_output_dir = \"/opt/xdebug\"" >> /etc/php/7.4/cli/php.ini && \
     echo 'xdebug.remote_autostart = 1' >> /etc/php/7.4/apache2/php.ini && \
     echo 'xdebug.remote_enable = 1' >> /etc/php/7.4/apache2/php.ini && \
-    echo 'xdebug.remote_connect_back = 1' >> /etc/php/7.4/apache2/php.ini
+    echo 'xdebug.remote_connect_back = 1' >> /etc/php/7.4/apache2/php.ini && \
+    phpenmod intl
 
 WORKDIR ${APACHE_DOCUMENT_ROOT}
 USER developer

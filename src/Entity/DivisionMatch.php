@@ -5,6 +5,7 @@ namespace App\Entity;
 use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 
 /**
  * DivisionMatch
@@ -12,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="division_match", uniqueConstraints={@ORM\UniqueConstraint(name="division_match_pk", columns={"team_a_id", "team_b_id"})}, indexes={@ORM\Index(name="division_match_challenge_division_team_id_fk_2", columns={"team_b_id"}), @ORM\Index(name="IDX_531F211BEA3FA723", columns={"team_a_id"})})
  * @ORM\Entity(repositoryClass="App\Repository\DivisionMatchRepository")
  */
-class DivisionMatch
+class DivisionMatch implements JsonSerializable
 {
     /**
      * @var int
@@ -130,4 +131,15 @@ class DivisionMatch
     }
 
 
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'teamA' => $this->getTeamA(),
+            'teamB' => $this->getTeamB(),
+            'teamAWin' => $this->getTeamAWin(),
+            'created' => $this->getCreated(),
+            'resulted' => $this->getResulted(),
+        ];
+    }
 }

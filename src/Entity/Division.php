@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 
 /**
  * Division
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="division", uniqueConstraints={@ORM\UniqueConstraint(name="division_name_uindex", columns={"name"})})
  * @ORM\Entity(repositoryClass="App\Repository\DivisionRepository")
  */
-class Division
+class Division implements JsonSerializable
 {
     /**
      * @var int
@@ -45,5 +46,16 @@ class Division
         return $this;
     }
 
+    public function __toString(): string
+    {
+        return $this->getName();
+    }
 
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+        ];
+    }
 }

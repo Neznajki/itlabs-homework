@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\ChallengeDivision;
 use App\Entity\DivisionMatch;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
@@ -22,6 +23,20 @@ class DivisionMatchRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param ChallengeDivision $challengeDivision
+     * @return DivisionMatch[]
+     */
+    public function getMatchesByChallengeDivision(ChallengeDivision $challengeDivision): array
+    {
+        return $this->createQueryBuilder('d')
+            ->join('d.teamA', 'ta')
+            ->andWhere('ta.challengeDivision = :challengeId')
+            ->setParameter('challengeId', $challengeDivision->getId())
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
      * @param DivisionMatch $entity
      * @throws ORMException
      * @throws OptimisticLockException
@@ -31,23 +46,6 @@ class DivisionMatchRepository extends ServiceEntityRepository
         $this->getEntityManager()->persist($entity);
         $this->getEntityManager()->flush($entity);
     }
-
-    // /**
-    //  * @return DivisionMatch[] Returns an array of DivisionMatch objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('d')
-            ->andWhere('d.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('d.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
 
     /*
     public function findOneBySomeField($value): ?DivisionMatch

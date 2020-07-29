@@ -26,7 +26,6 @@ $(() => {
                     }
                 }
             )
-            console.info(sendingData);
         } catch (e) {
             alert(e.message);
         }
