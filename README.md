@@ -9,3 +9,4 @@
 * creating team grid 2h
 * creating output for challenge create 1h
 * started division challenge creation 1h
+* creating challenge start 2h

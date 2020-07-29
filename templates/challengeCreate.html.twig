@@ -1,31 +1,31 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-    <div class="input-group mb-3">
-        <div class="input-group-text">First Play Off: </div>
-        {% for playOf in playOfs %}
-            <div class="input-group-prepend">
-                <div class="input-group-text">
-                    <input id="play_of_{{ playOf.id }}" name="playOfType" type="radio" data-games="{{ playOf.matchCount }}" {% if playOf.matchCount == 4 %} checked="checked" {% endif %}>
-                </div>
-            </div>
-            <label for="play_of_{{ playOf.id }}" class="form-control" aria-label="{{ playOf.name }}">{{ playOf.name }}</label>
-        {% endfor %}
-    </div>
-
-    <div class="input-group-text">Participant Teams:</div>
-    <div class="d-flex flex-wrap">
-        {% for team in teams %}
-            <div class="input-group w-auto">
+        <div class="input-group mb-3">
+            <div class="input-group-text">First Play Off: </div>
+            {% for playOf in playOfs %}
                 <div class="input-group-prepend">
                     <div class="input-group-text">
-                        <input id="team_{{ team.id }}" type="checkbox" checked="checked" name="teams" value="{{ team.id }}">
+                        <input id="play_of_{{ playOf.id }}" name="playOfType" value="{{ playOf.id }}" type="radio" data-games="{{ playOf.matchCount }}" {% if playOf.matchCount == 4 %} checked="checked" {% endif %}>
                     </div>
                 </div>
-                <label for="team_{{ team.id }}" class="form-control" aria-label="{{ team.name }}">{{ team.name }}</label>
-            </div>
-        {% endfor %}
-    </div>
-    <center><button id="submitTeamCreate" class="btn btn-success">save</button></center>
+                <label for="play_of_{{ playOf.id }}" class="form-control" aria-label="{{ playOf.name }}">{{ playOf.name }}</label>
+            {% endfor %}
+        </div>
+
+        <div class="input-group-text">Participant Teams:</div>
+        <div class="d-flex flex-wrap">
+            {% for team in teams %}
+                <div class="input-group w-auto">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <input id="team_{{ team.id }}" type="checkbox" checked="checked" name="teams" value="{{ team.id }}">
+                        </div>
+                    </div>
+                    <label for="team_{{ team.id }}" class="form-control" aria-label="{{ team.name }}">{{ team.name }}</label>
+                </div>
+            {% endfor %}
+        </div>
+        <center><button id="submitTeamCreate" class="btn btn-success" data-action="{{ path('challenge_start', {'playOfId' : '$playOfId'}) }}" data-redirect="{{ path('challenge_display', {'challengeId':'$challengeId'}) }}">save</button></center>
 {% endblock %}
 {% block javascripts %}
     <script src="{{ asset('js/createChallenge.js') }}"></script>

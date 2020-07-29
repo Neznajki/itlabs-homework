@@ -8,7 +8,11 @@ namespace App\Controller;
 use App\Repository\PlayOfStepsRepository;
 use App\Repository\TeamRepository;
 use App\Service\ChallengeService;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Exception\InvalidArgumentException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -52,8 +56,22 @@ class ChallengeController extends AbstractController
         );
     }
 
-    public function startAction()
+    /**
+     * @Route("/challenge/start/{playOfId}", name="challenge_start")
+     * @param ChallengeService $challengeService
+     * @param int $playOfId
+     * @return JsonResponse
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function startAction(ChallengeService $challengeService, int $playOfId): JsonResponse
     {
+        if (empty($_REQUEST['teams'])) {
+            throw new InvalidArgumentException('teams should be provided');
+        }
 
+        $challenge = $challengeService->startChallenge($playOfId, $_REQUEST['teams']);
+
+        return new JsonResponse(['data' => $challenge]);
     }
 }

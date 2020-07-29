@@ -2,8 +2,11 @@
 
 namespace App\Repository;
 
+use App\Entity\ChallengeDivision;
 use App\Entity\ChallengeDivisionTeam;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -19,6 +22,28 @@ class ChallengeDivisionTeamRepository extends ServiceEntityRepository
         parent::__construct($registry, ChallengeDivisionTeam::class);
     }
 
+    /**
+     * @param ChallengeDivision $challengeDivision
+     * @return ChallengeDivisionTeam[]
+     */
+    public function getTeamsByChallengeDivision(ChallengeDivision $challengeDivision): array
+    {
+        return $this->findBy(
+            ['challengeDivision' => $challengeDivision],
+            ['id'=> 'ASC']
+        );
+    }
+
+    /**
+     * @param ChallengeDivisionTeam $challengeDivisionTeam
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function save(ChallengeDivisionTeam $challengeDivisionTeam)
+    {
+        $this->getEntityManager()->persist($challengeDivisionTeam);
+        $this->getEntityManager()->flush($challengeDivisionTeam);
+    }
     // /**
     //  * @return ChallengeDivisionTeam[] Returns an array of ChallengeDivisionTeam objects
     //  */

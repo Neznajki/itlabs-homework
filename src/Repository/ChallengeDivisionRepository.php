@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\ChallengeDivision;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -19,6 +21,16 @@ class ChallengeDivisionRepository extends ServiceEntityRepository
         parent::__construct($registry, ChallengeDivision::class);
     }
 
+    /**
+     * @param ChallengeDivision $challengeDivision
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function save(ChallengeDivision $challengeDivision)
+    {
+        $this->getEntityManager()->persist($challengeDivision);
+        $this->getEntityManager()->flush($challengeDivision);
+    }
     // /**
     //  * @return ChallengeDivision[] Returns an array of ChallengeDivision objects
     //  */

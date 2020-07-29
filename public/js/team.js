@@ -7,8 +7,8 @@ $(() => {
             let sendingData = validate(formData);
 
             $.ajax(form.attr('action')
-                .replace('%24name', sendingData['name'])
-                .replace('%24strength', sendingData['strength']),
+                .replace(encodeURIComponent('$name'), sendingData['name'])
+                .replace(encodeURIComponent('$strength'), sendingData['strength']),
                 {
                     'accepts': 'application/json',
                     'success': function () {

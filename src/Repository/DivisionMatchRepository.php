@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\DivisionMatch;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -17,6 +19,17 @@ class DivisionMatchRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, DivisionMatch::class);
+    }
+
+    /**
+     * @param DivisionMatch $entity
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function save(DivisionMatch $entity)
+    {
+        $this->getEntityManager()->persist($entity);
+        $this->getEntityManager()->flush($entity);
     }
 
     // /**

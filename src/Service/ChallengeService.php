@@ -11,6 +11,9 @@ use App\Repository\ChallengeRepository;
 use App\Repository\PlayOfStepsRepository;
 use App\Repository\TeamRepository;
 use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Symfony\Component\Form\Exception\InvalidArgumentException;
 
 class ChallengeService
@@ -21,18 +24,31 @@ class ChallengeService
     private $teamRepository;
     /** @var PlayOfStepsRepository */
     private $playOfStepsRepository;
+    /** @var DivisionService */
+    private $divisionService;
+    /** @var EntityManagerInterface */
+    private $entityManager;
 
     /**
      * ChallengeService constructor.
      * @param ChallengeRepository $challengeRepository
      * @param TeamRepository $teamRepository
      * @param PlayOfStepsRepository $playOfStepsRepository
+     * @param DivisionService $divisionService
+     * @param EntityManagerInterface $entityManager
      */
-    public function __construct(ChallengeRepository $challengeRepository, TeamRepository $teamRepository, PlayOfStepsRepository $playOfStepsRepository)
-    {
+    public function __construct(
+        ChallengeRepository $challengeRepository,
+        TeamRepository $teamRepository,
+        PlayOfStepsRepository $playOfStepsRepository,
+        DivisionService $divisionService,
+        EntityManagerInterface $entityManager
+    ) {
         $this->challengeRepository = $challengeRepository;
         $this->teamRepository = $teamRepository;
         $this->playOfStepsRepository = $playOfStepsRepository;
+        $this->divisionService = $divisionService;
+        $this->entityManager = $entityManager;
     }
 
     public function getExistingChallengeData(int $challengeId): ChallengeData
@@ -40,6 +56,13 @@ class ChallengeService
         return new ChallengeData();
     }
 
+    /**
+     * @param int $playOfId
+     * @param array $teamsId
+     * @return Challenge
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
     public function startChallenge(int $playOfId, array $teamsId): Challenge
     {
         $playOf = $this->playOfStepsRepository->find($playOfId);
@@ -50,15 +73,24 @@ class ChallengeService
 
         $teams = $this->teamRepository->findBy(['id' => $teamsId]);
 
-        if ($playOf->getMatchCount() * 4 < count($teams)) {
-            throw new InvalidArgumentException("play of teams count should have at least 4x times more teams to make tournament complete");
+        if ($playOf->getMatchCount() * 4 > count($teams)) {
+            throw new InvalidArgumentException(
+                "play of teams count should have at least 4x times more teams to make tournament complete"
+            );
         }
 
+        $this->entityManager->beginTransaction();
         $challenge = new Challenge();
 
         $challenge->setCreated(new DateTime());
-        $challenge->setName(sprintf('challenge_%s', $challenge->getCreated()->format('Y-m-d H:i:s')));
+        $challenge->setName(sprintf('challenge %s', $challenge->getCreated()->format('Y-m-d H:i:s')));
         $this->challengeRepository->save($challenge);
+
+        $this->divisionService->createChallengeDivisionsWithTeamsAndMatches(
+            $challenge,
+            $teams
+        );
+        $this->entityManager->commit();
 
         return $challenge;
     }

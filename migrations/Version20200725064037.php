@@ -69,22 +69,17 @@ final class Version20200725064037 extends AbstractMigration
     constraint challenge_division_division_id_fk
         foreign key (division_id) references division (id)
 );");
-        $this->addSql("create table challenge_division_team
-(
-    id                    int auto_increment
-        primary key,
-    challenge_division_id int       not null,
-    team_id               int       not null,
-    assigned              timestamp null,
-    constraint challenge_division_team_challenge_division_id_uindex
-        unique (challenge_division_id),
-    constraint challenge_division_team_team_id_uindex
-        unique (team_id),
-    constraint challenge_division_team_challenge_division_id_fk
-        foreign key (challenge_division_id) references challenge_division (id),
-    constraint challenge_division_team_team_id_fk
-        foreign key (team_id) references team (id)
-);");
+        $this->addSql("CREATE TABLE `challenge_division_team` (
+                                           `id` int(11) NOT NULL AUTO_INCREMENT,
+                                           `challenge_division_id` int(11) NOT NULL,
+                                           `team_id` int(11) NOT NULL,
+                                           `assigned` timestamp NULL DEFAULT NULL,
+                                           PRIMARY KEY (`id`),
+                                           UNIQUE KEY `challenge_division_team_challenge_division_id_team_id_uindex` (`challenge_division_id`, `team_id`),
+                                           KEY `challenge_division_team_team_id_index` (`team_id`),
+                                           CONSTRAINT `challenge_division_team_challenge_division_id_fk` FOREIGN KEY (`challenge_division_id`) REFERENCES `challenge_division` (`id`),
+                                           CONSTRAINT `challenge_division_team_team_id_fk` FOREIGN KEY (`team_id`) REFERENCES `team` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1");
         $this->addSql("create table challenge_play_of_step
 (
     id              int auto_increment
