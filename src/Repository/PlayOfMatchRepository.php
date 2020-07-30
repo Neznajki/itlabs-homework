@@ -2,9 +2,13 @@
 
 namespace App\Repository;
 
+use App\Entity\Challenge;
 use App\Entity\PlayOfMatch;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
+use RuntimeException;
 
 /**
  * @method PlayOfMatch|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,6 +21,41 @@ class PlayOfMatchRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, PlayOfMatch::class);
+    }
+
+    /**
+     * @param Challenge $challenge
+     * @return PlayOfMatch[]
+     */
+    public function getPlayOfDataByChallenge(Challenge $challenge): array
+    {
+        return
+            $this->createQueryBuilder('pom')
+                ->join('pom.teamA', 'ta')
+                ->join('ta.challengeDivision', 'cd')
+                ->andWhere('cd.challenge = :challengeId')
+                ->setParameter('challengeId', $challenge->getId())
+                ->getQuery()
+                ->getResult();
+    }
+
+    /**
+     * @param PlayOfMatch[] $entities
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function massSave(array $entities)
+    {
+        foreach ($entities as $entity) {
+            if (! $entity instanceof PlayOfMatch) {
+                throw new RuntimeException(sprintf('batch save only for %s entity', PlayOfMatch::class));
+            }
+        }
+
+        foreach ($entities as $entity) {
+            $this->getEntityManager()->persist($entity);
+        }
+        $this->getEntityManager()->flush($entities);
     }
 
     // /**

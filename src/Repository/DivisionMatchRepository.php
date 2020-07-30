@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Challenge;
 use App\Entity\ChallengeDivision;
 use App\Entity\DivisionMatch;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -23,13 +24,28 @@ class DivisionMatchRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param Challenge $challenge
+     * @return DivisionMatch[]
+     */
+    public function getMatchesByChallenge(Challenge $challenge): array
+    {
+        return $this->createQueryBuilder('dn')
+            ->join('dn.teamA', 'ta')
+            ->join('ta.challengeDivision', 'cd')
+            ->andWhere('cd.challenge = :challengeId')
+            ->setParameter('challengeId', $challenge->getId())
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
      * @param ChallengeDivision $challengeDivision
      * @return DivisionMatch[]
      */
     public function getMatchesByChallengeDivision(ChallengeDivision $challengeDivision): array
     {
-        return $this->createQueryBuilder('d')
-            ->join('d.teamA', 'ta')
+        return $this->createQueryBuilder('dn')
+            ->join('dn.teamA', 'ta')
             ->andWhere('ta.challengeDivision = :challengeId')
             ->setParameter('challengeId', $challengeDivision->getId())
             ->getQuery()

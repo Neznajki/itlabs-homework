@@ -1,5 +1,11 @@
 {% extends 'base.html.twig' %}
 {% block body %}
+    {% if challengeData.haveDivisionMatch %}
+        <div>division matches still in progress</div>
+    {% else %}
+        <a href="{{ path('challenge_play_of_display', {'challengeId': challengeId}) }}" target="_blank">go to play of</a>
+    {% endif %}
+    {# @var challengeDivisionData \App\DataObject\ChallengeDivisionData #}
     {% for challengeDivisionData in challengeData.challengeDivisions %}
         <div>
             {{ challengeDivisionData.name }} {% if challengeDivisionData.haveMatches() %}<button class="calculateAll btn btn-success">Calculate Division</button>{% endif %}
@@ -20,10 +26,12 @@
                             {% if teamA.id == teamB.id %}
                                 <td>NO MATCH</td>
                             {% else %}
+                                {# @var match \App\Entity\DivisionMatch #}
                                 {% set match = challengeDivisionData.getMatch(teamA, teamB) %}
                                 {% if match is not null %}
                                     <td>{% if match.teamAWin is null %}<button data-matchId="{{ match.id }}" class="matchCalculate btn btn-success" data-action="{{ path('division_match_calculate', {'matchId': match.id} ) }}">calculate</button>{% else %}{% if match.teamAWin %}1:0{% else %}0:1{% endif %}{% endif %}</td>
                                 {% else %}
+                                    {# @var match \App\Entity\DivisionMatch #}
                                     {% set match = challengeDivisionData.getMatch(teamB, teamA) %}
                                     <td>{% if match.teamAWin is null %}<button data-matchId="{{ match.id }}" class="matchCalculate btn btn-success" data-action="{{ path('division_match_calculate', {'matchId': match.id} ) }}">calculate</button>{% else %}{% if match.teamAWin %}0:1{% else %}1:0{% endif %}{% endif %}</td>
                                 {% endif %}

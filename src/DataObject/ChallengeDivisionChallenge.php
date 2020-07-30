@@ -10,7 +10,7 @@ use App\Entity\ChallengeDivisionTeam;
 use App\Entity\DivisionMatch;
 use RuntimeException;
 
-class ChallengeData
+class ChallengeDivisionChallenge
 {
     /** @var ChallengeDivisionData[] */
     protected $challengeDivisions = [];
@@ -21,6 +21,19 @@ class ChallengeData
     public function getChallengeDivisions(): array
     {
         return $this->challengeDivisions;
+    }
+
+    /**
+     * @return bool
+     */
+    public function haveDivisionMatch():bool
+    {
+        foreach ($this->getChallengeDivisions() as $challengeDivision) {
+            if ($challengeDivision->haveMatches()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

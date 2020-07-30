@@ -9,7 +9,7 @@ use App\Entity\ChallengeDivision;
 use App\Entity\ChallengeDivisionTeam;
 use App\Entity\DivisionMatch;
 
-class ChallengeDivisionData
+class ChallengeDivisionData extends AbstractScoreCounter
 {
     /** @var ChallengeDivision */
     private $challengeDivision;
@@ -46,11 +46,19 @@ class ChallengeDivisionData
     }
 
     /**
+     * @return DivisionMatch[]
+     */
+    public function getMatches(): array
+    {
+        return $this->divisionMatches;
+    }
+
+    /**
      * @return bool
      */
     public function haveMatches(): bool
     {
-        foreach ($this->divisionMatches as $match) {
+        foreach ($this->getMatches() as $match) {
             if ($match->getTeamAWin() === null) {
                 return true;
             }
@@ -66,7 +74,7 @@ class ChallengeDivisionData
      */
     public function getMatch(ChallengeDivisionTeam $teamA, ChallengeDivisionTeam $teamB): ?DivisionMatch
     {
-        foreach ($this->divisionMatches as $divisionMatch) {
+        foreach ($this->getMatches() as $divisionMatch) {
             if (
                 $teamA->getId() == $divisionMatch->getTeamA()->getId() &&
                 $teamB->getId() == $divisionMatch->getTeamB()->getId()
@@ -76,31 +84,6 @@ class ChallengeDivisionData
         }
 
         return null;
-    }
-
-    /**
-     * @param ChallengeDivisionTeam $team
-     * @return int
-     */
-    public function getScore(ChallengeDivisionTeam $team): int
-    {
-        $result = 0;
-
-        foreach ($this->divisionMatches as $divisionMatch) {
-            if (
-                $divisionMatch->getTeamA()->getId() == $team->getId() &&
-                $divisionMatch->getTeamAWin() === true
-            ) {
-                $result ++;
-            } elseif(
-                $divisionMatch->getTeamB()->getId() == $team->getId() &&
-                $divisionMatch->getTeamAWin() === false
-            ) {
-                $result ++;
-            }
-        }
-
-        return $result;
     }
 
     /**

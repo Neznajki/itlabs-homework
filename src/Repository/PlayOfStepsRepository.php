@@ -19,6 +19,20 @@ class PlayOfStepsRepository extends ServiceEntityRepository
         parent::__construct($registry, PlayOfSteps::class);
     }
 
+    /**
+     * @param PlayOfSteps $playOfSteps
+     * @return PlayOfSteps[]
+     */
+    public function getAllStepsByFirstStep(PlayOfSteps $playOfSteps): array
+    {
+        return $this->createQueryBuilder('pos')
+            ->andWhere('pos.matchCount <= :matchCount')
+            ->setParameter('matchCount', $playOfSteps->getMatchCount())
+            ->orderBy('pos.matchCount', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return PlayOfSteps[] Returns an array of PlayOfSteps objects
     //  */

@@ -25,7 +25,7 @@
                 </div>
             {% endfor %}
         </div>
-        <center><button id="submitTeamCreate" class="btn btn-success" data-action="{{ path('challenge_start', {'playOfId' : '$playOfId'}) }}" data-redirect="{{ path('challenge_display', {'challengeId':'$challengeId'}) }}">save</button></center>
+        <center><button id="submitTeamCreate" class="btn btn-success" data-action="{{ path('challenge_start', {'playOfId' : '$playOfId'}) }}" data-redirect="{{ path('challenge_division_display', {'challengeId':'$challengeId'}) }}">save</button></center>
 {% endblock %}
 {% block javascripts %}
     <script src="{{ asset('js/createChallenge.js') }}"></script>

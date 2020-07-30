@@ -2,8 +2,11 @@
 
 namespace App\Repository;
 
+use App\Entity\Challenge;
 use App\Entity\ChallengePlayOfStep;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -17,6 +20,26 @@ class ChallengePlayOfStepRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ChallengePlayOfStep::class);
+    }
+
+    /**
+     * @param Challenge $challenge
+     * @return ChallengePlayOfStep
+     */
+    public function getByChallenge(Challenge $challenge): ChallengePlayOfStep
+    {
+        return $this->findOneBy(['challenge' => $challenge]);
+    }
+
+    /**
+     * @param ChallengePlayOfStep $challengeDivisionTeam
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function save(ChallengePlayOfStep $challengeDivisionTeam)
+    {
+        $this->getEntityManager()->persist($challengeDivisionTeam);
+        $this->getEntityManager()->flush($challengeDivisionTeam);
     }
 
     // /**

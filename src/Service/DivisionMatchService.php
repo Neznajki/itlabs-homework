@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 
+use App\Entity\Challenge;
 use App\Entity\ChallengeDivision;
 use App\Entity\ChallengeDivisionTeam;
 use App\Entity\DivisionMatch;
@@ -105,6 +106,15 @@ class DivisionMatchService
     public function getDivisionMatches(ChallengeDivision $challengeDivision): array
     {
         return $this->divisionMatchRepository->getMatchesByChallengeDivision($challengeDivision);
+    }
+
+    /**
+     * @param Challenge $challengeDivision
+     * @return DivisionMatch[]
+     */
+    public function getChallengeMatches(Challenge $challengeDivision): array
+    {
+        return $this->divisionMatchRepository->getMatchesByChallenge($challengeDivision);
     }
 
     /**

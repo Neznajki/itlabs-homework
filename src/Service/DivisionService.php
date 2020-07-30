@@ -57,6 +57,15 @@ class DivisionService
     }
 
     /**
+     * @param Challenge $challenge
+     * @return DivisionMatch[]
+     */
+    public function getDivisionMatchesByChallenge(Challenge $challenge): array
+    {
+        return $this->divisionMatchService->getChallengeMatches($challenge);
+    }
+
+    /**
      * @param ChallengeDivision $challengeDivision
      * @return DivisionMatch[]
      */

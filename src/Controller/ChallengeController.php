@@ -20,20 +20,37 @@ class ChallengeController extends AbstractController
 {
 
     /**
-     * @Route("/challenge/dispaly/{challengeId}", name="challenge_display")
+     * @Route("/challenge/division/dispaly/{challengeId}", name="challenge_division_display")
      * @param ChallengeService $challengeService
      * @param int $challengeId
      * @return Response
      */
-    public function displayAction(ChallengeService $challengeService, int $challengeId): Response
+    public function displayDivisionAction(ChallengeService $challengeService, int $challengeId): Response
     {
         return $this->render(
-            'challengeDisplay.html.twig',
+            'challengeDivisionDisplay.html.twig',
             [
-                'title' => 'challenge display',
-                'challengeData' => $challengeService->getExistingChallengeData($challengeId),
+                'title' => 'challenge division display',
+                'challengeData' => $challengeService->getExistingChallengeDivisionCollection($challengeId),
+                'challengeId' => $challengeId,
             ]
         );
+    }
+
+    /**
+     * @Route("/challenge/play/of/dispaly/{challengeId}", name="challenge_play_of_display")
+     * @param ChallengeService $challengeService
+     * @param int $challengeId
+     * @return Response
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function displayPlayOfAction(ChallengeService $challengeService, int $challengeId): Response
+    {
+        return $this->render('challengePlayOfDisplay.html.twig', [
+            'title' => 'challenge play off display',
+            'challengeData' => $challengeService->getPlayOfData($challengeId),
+        ]);
     }
 
     /**
