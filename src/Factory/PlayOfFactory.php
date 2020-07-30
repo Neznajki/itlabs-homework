@@ -16,9 +16,10 @@ class PlayOfFactory
     /**
      * @param PlayOfSteps $playOfStep
      * @param array $matches
+     * @param int $divisionsCount
      * @return PlayOfMatch[]
      */
-    public static function createPlayOfByDivisionMatches(PlayOfSteps $playOfStep, array $matches): array
+    public static function createPlayOfByDivisionMatches(PlayOfSteps $playOfStep, array $matches, int $divisionsCount = 2): array
     {
         $result = [];
 
@@ -27,10 +28,12 @@ class PlayOfFactory
         $divisions = $divisionMatches->getDivisions();
 
         $playOfCollection = new PlayOfCollection();
-        $divisionPlayersCount = $playOfStep->getMatchCount();//could be /2 in case 4 divisions
+        $divisionPlayersCount = $playOfStep->getMatchCount() / $divisionsCount;//could be /4 in case 4 divisions
 
         foreach ($divisions as $divisionId) {
-            $playOfPotential = new PlayOfPotential($playOfStep);
+            $divisionMatches->isEnoughTeams($divisionId, $divisionPlayersCount * $divisionsCount);
+
+            $playOfPotential = new PlayOfPotential($divisionPlayersCount);
             $playOfCollection->addPlayOfData($divisionId, $playOfPotential);
 
             $playOfPotential->setPotentialWinners(
@@ -46,7 +49,12 @@ class PlayOfFactory
             $divisionMatches->removeFromPool($divisionId, $playOfPotential->getLosers());
         }
 
+        $matchPos = 1;
         while ($playOfMatch = $playOfCollection->createPlayOfMatchEntity()) {
+            $playOfMatch->setPlayOfStep($playOfStep);
+            $playOfMatch->setMatchPos($matchPos);
+
+            $matchPos++;
             $result[] = $playOfMatch;
         }
 

@@ -33,4 +33,34 @@ class ChallengePlayOfData
         $this->steps = $steps;
         $this->matches = $matches;
     }
+
+    /**
+     * @return PlayOfSteps[]
+     */
+    public function getSteps(): array
+    {
+        return $this->steps;
+    }
+
+    /**
+     * @param PlayOfSteps $step
+     * @param int $matchNumber
+     * @return PlayOfMatch|null
+     */
+    public function getStepMatch(PlayOfSteps $step, int $matchNumber): ?PlayOfMatch
+    {
+        $matchNumber --;
+
+        foreach ($this->matches as $match) {
+            if ($match->getPlayOfStep()->getId() == $step->getId()) {
+                if ($matchNumber == 0) {
+                    return $match;
+                }
+
+                $matchNumber--;
+            }
+        }
+
+        return null;
+    }
 }

@@ -31,6 +31,13 @@ class PlayOfMatch
     private $teamAWin;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="match_pos", type="integer", nullable=false)
+     */
+    private $matchPos;
+
+    /**
      * @var DateTime|null
      *
      * @ORM\Column(name="created", type="datetime", nullable=true)
@@ -87,6 +94,25 @@ class PlayOfMatch
     public function setTeamAWin(?bool $teamAWin): self
     {
         $this->teamAWin = $teamAWin;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMatchPos(): int
+    {
+        return $this->matchPos;
+    }
+
+    /**
+     * @param int $matchPos
+     * @return PlayOfMatch
+     */
+    public function setMatchPos(int $matchPos): self
+    {
+        $this->matchPos = $matchPos;
 
         return $this;
     }

@@ -9,6 +9,7 @@ use App\Entity\Challenge;
 use App\Entity\ChallengeDivision;
 use App\Entity\ChallengeDivisionTeam;
 use App\Entity\DivisionMatch;
+use App\Helper\MatchHelper;
 use App\Repository\ChallengeDivisionTeamRepository;
 use App\Repository\DivisionMatchRepository;
 use DateTime;
@@ -54,15 +55,13 @@ class DivisionMatchService
             throw new \InvalidArgumentException("division match {$matchId} already have results");
         }
 
-        $teamAStrength = $match->getTeamA()->getTeam()->getStrength();
-        $maxNumber = $teamAStrength + $match->getTeamB()->getTeam()->getStrength();
-        $random = rand(1, $maxNumber);
+        $match->setTeamAWin(
+            MatchHelper::predictTeamAWin(
+                $match->getTeamA(),
+                $match->getTeamB()
+            )
+        );
 
-        if ($random <= $teamAStrength) {
-            $match->setTeamAWin(true);
-        } else {
-            $match->setTeamAWin(false);
-        }
         $match->setResulted(new DateTime());
 
         $this->divisionMatchRepository->save($match);

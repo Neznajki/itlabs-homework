@@ -49,7 +49,7 @@ class ChallengeController extends AbstractController
     {
         return $this->render('challengePlayOfDisplay.html.twig', [
             'title' => 'challenge play off display',
-            'challengeData' => $challengeService->getPlayOfData($challengeId),
+            'challengePlayOfData' => $challengeService->getPlayOfData($challengeId),
         ]);
     }
 

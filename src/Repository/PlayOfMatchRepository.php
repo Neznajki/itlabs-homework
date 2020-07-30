@@ -24,6 +24,43 @@ class PlayOfMatchRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param PlayOfMatch $playOfMatch
+     * @return bool
+     */
+    public function isLastMatch(PlayOfMatch $playOfMatch): bool
+    {
+        return empty(
+            $this->createQueryBuilder('pom')
+                ->join('pom.teamA', 'ta')
+                ->join('ta.challengeDivision', 'cd')
+                ->andWhere('cd.challenge = :challengeId')
+                ->setParameter('challengeId', $playOfMatch->getTeamA()->getChallengeDivision()->getChallenge())
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getResult()
+        );
+    }
+
+    /**
+     * @param PlayOfMatch $playOfMatch
+     * @return PlayOfMatch[]
+     */
+    public function getCurrentStepMatches(PlayOfMatch $playOfMatch): array
+    {
+        return
+            $this->createQueryBuilder('pom')
+                ->join('pom.teamA', 'ta')
+                ->join('ta.challengeDivision', 'cd')
+                ->andWhere('cd.challenge = :challengeId')
+                ->andWhere('pom.playOfStep = :stepId')
+                ->setParameter('challengeId', $playOfMatch->getTeamA()->getChallengeDivision()->getChallenge())
+                ->setParameter('stepId', $playOfMatch->getPlayOfStep()->getId())
+                ->orderBy('pom.matchPos')
+                ->getQuery()
+                ->getResult();
+    }
+
+    /**
      * @param Challenge $challenge
      * @return PlayOfMatch[]
      */
@@ -37,6 +74,17 @@ class PlayOfMatchRepository extends ServiceEntityRepository
                 ->setParameter('challengeId', $challenge->getId())
                 ->getQuery()
                 ->getResult();
+    }
+
+    /**
+     * @param PlayOfMatch $entity
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function save(PlayOfMatch $entity)
+    {
+        $this->getEntityManager()->persist($entity);
+        $this->getEntityManager()->flush($entity);
     }
 
     /**

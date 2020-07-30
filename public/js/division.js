@@ -13,6 +13,7 @@ $(() => {
                 window.location.reload();
             }
         };
+
         $.ajax($(this).data('action'), {
             'success': reloadInCaseOfNeed,
             'error': reloadInCaseOfNeed,

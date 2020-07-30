@@ -109,12 +109,14 @@ final class Version20200725064037 extends AbstractMigration
     constraint division_match_challenge_division_team_id_fk_2
         foreign key (team_b_id) references challenge_division_team (id)
 );");
+
         $this->addSql("create table play_of_match
 (
     id              int auto_increment
         primary key,
     team_a_id       int       null,
     team_b_id       int       null,
+    match_pos       int       not null,
     play_of_step_id int       null,
     team_a_win      tinyint   null,
     created         timestamp null,

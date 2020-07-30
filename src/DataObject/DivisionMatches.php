@@ -8,6 +8,7 @@ namespace App\DataObject;
 use App\Entity\ChallengeDivisionTeam;
 use App\Entity\DivisionMatch;
 use App\Entity\Team;
+use RuntimeException;
 
 class DivisionMatches extends AbstractScoreCounter
 {
@@ -45,6 +46,18 @@ class DivisionMatches extends AbstractScoreCounter
     public function getDivisions(): array
     {
         return array_keys($this->sortedDivisionTeams);
+    }
+
+
+    /**
+     * @param int $divisionId
+     * @param int $required
+     */
+    public function isEnoughTeams(int $divisionId, int $required)
+    {
+        if (count($this->sortedDivisionTeams[$divisionId]) < $required) {
+            throw new RuntimeException('not enough team for play of calculation');
+        }
     }
 
     /**

@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\PlayOfSteps;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use RuntimeException;
 
 /**
  * @method PlayOfSteps|null find($id, $lockMode = null, $lockVersion = null)
@@ -31,6 +32,20 @@ class PlayOfStepsRepository extends ServiceEntityRepository
             ->orderBy('pos.matchCount', 'DESC')
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * @param PlayOfSteps $playOfSteps
+     * @return PlayOfSteps
+     */
+    public function getNextPlayOfStep(PlayOfSteps $playOfSteps): PlayOfSteps
+    {
+        $result = $this->findOneBy(['matchCount' => $playOfSteps->getMatchCount() / 2]);
+        if ($result == null) {
+            throw new RuntimeException("could not find nex step after {$playOfSteps->getName()} ({$playOfSteps->getId()})");
+        }
+
+        return $result;
     }
 
     // /**

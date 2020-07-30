@@ -6,29 +6,27 @@ namespace App\DataObject;
 
 
 use App\Entity\ChallengeDivisionTeam;
-use App\Entity\PlayOfSteps;
 
 class PlayOfPotential
 {
-    /** @var ChallengeDivisionTeam[]  */
+    /** @var ChallengeDivisionTeam[] */
     protected array $winners;
-    /** @var ChallengeDivisionTeam[]  */
+    /** @var ChallengeDivisionTeam[] */
     protected array $losers;
 
-    /** @var ChallengeDivisionTeam[][]  */
+    /** @var ChallengeDivisionTeam[][] */
     protected array $potentialWinners;
-    /** @var ChallengeDivisionTeam[][]  */
+    /** @var ChallengeDivisionTeam[][] */
     protected array $potentialLosers;
-    /** @var PlayOfSteps */
-    private PlayOfSteps $playOfSteps;
+    private int $teamsRequired;
 
     /**
      * PlayOfPotential constructor.
-     * @param PlayOfSteps $playOfSteps
+     * @param int $teamsRequired
      */
-    public function __construct(PlayOfSteps $playOfSteps)
+    public function __construct(int $teamsRequired)
     {
-        $this->playOfSteps = $playOfSteps;
+        $this->teamsRequired = $teamsRequired;
     }
 
     /**
@@ -104,7 +102,7 @@ class PlayOfPotential
      */
     public function tieBreak(array $teams, int $required): array
     {
-        if (count($teams) == $required) {
+        if (count($teams) <= $required) {
             return $teams;
         }
         $result = [];
@@ -130,11 +128,10 @@ class PlayOfPotential
         $chosen = [];
 
         while (!empty($tmpPotentialWinners)) {
-            $teams = array_shift($tmpPotentialWinners);
-
-            if (empty($tmpPotentialWinners)) {
-                $teams = $this->tieBreak($teams, $this->playOfSteps->getMatchCount() - count($chosen));
-            }
+            $teams = $this->tieBreak(
+                array_shift($tmpPotentialWinners),
+                $this->teamsRequired - count($chosen)
+            );
 
             foreach ($teams as $team) {
                 $chosen[$team->getId()] = $team;

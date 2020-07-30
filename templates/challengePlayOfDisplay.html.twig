@@ -1,4 +1,38 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-    not implemented
+    <div style="margin: auto; width: 100%; text-align: center;">
+
+        TBD = (To Be Decided) <br>
+        click VS to calculate results <br>
+        {# @var step \App\Entity\PlayOfSteps #}
+        {% for step in challengePlayOfData.steps %}
+            <table class="playOfBlock" style="text-align: left;">
+                {% for i in 1..step.matchCount %}
+                    {# @var match \App\Entity\PlayOfMatch#}
+                    {% set match = challengePlayOfData.stepMatch(step, i) %}
+                    {% if match is null %}
+                        <tr class="matchBlock"><td>TBD</td></tr>
+                    {% else %}
+                        <tr class="matchBlock">
+                            <td class="team-part teamA">{{ match.teamA.team.name }}</td>
+                            {% if match.teamAWin is null %}
+                                <td class="team-part notPlayed"> <button class="matchStart btn btn-success" data-action="{{ path('play_of_match_calculate', { 'matchId': match.id }) }}">VS</button> </td>
+                            {% elseif match.teamAWin %}
+                                <td class="team-part teamAWin"> < </td>
+                            {% else %}
+                                <td class="team-part teamBWin"> > </td>
+                            {% endif %}
+                            <td class="team-part teamB">{{ match.teamB.team.name }}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </table>
+        {% endfor %}
+    </div>
+{% endblock %}
+{% block stylesheets %}
+    <link href="{{ asset('css/playof.css') }}" rel="stylesheet">
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('js/playOf.js') }}"></script>
 {% endblock %}

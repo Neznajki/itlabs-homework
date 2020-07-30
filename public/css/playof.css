@@ -1,0 +1,12 @@
+.playOfBlock {
+    display: inline-block;
+    vertical-align: top;
+    border: black solid 1px;
+    padding: 2px;
+}
+.matchBlock {
+    border: black solid 1px;
+}
+.team-part {
+    display: inline-block;
+}
