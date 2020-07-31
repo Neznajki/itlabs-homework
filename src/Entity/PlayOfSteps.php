@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 
 /**
  * PlayOfSteps
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="play_of_steps", uniqueConstraints={@ORM\UniqueConstraint(name="play_of_steps_pk_2", columns={"name"}), @ORM\UniqueConstraint(name="play_of_steps_name_uindex", columns={"name"})})
  * @ORM\Entity(repositoryClass="App\Repository\PlayOfStepsRepository")
  */
-class PlayOfSteps
+class PlayOfSteps implements JsonSerializable
 {
     /**
      * @var int
@@ -65,4 +66,12 @@ class PlayOfSteps
     }
 
 
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'matchCount' => $this->getMatchCount(),
+        ];
+    }
 }

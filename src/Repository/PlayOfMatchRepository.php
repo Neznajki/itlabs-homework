@@ -34,6 +34,7 @@ class PlayOfMatchRepository extends ServiceEntityRepository
                 ->join('pom.teamA', 'ta')
                 ->join('ta.challengeDivision', 'cd')
                 ->andWhere('cd.challenge = :challengeId')
+                ->andWhere('pom.teamAWin is null')
                 ->setParameter('challengeId', $playOfMatch->getTeamA()->getChallengeDivision()->getChallenge())
                 ->setMaxResults(1)
                 ->getQuery()

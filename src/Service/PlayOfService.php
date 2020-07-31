@@ -166,25 +166,28 @@ class PlayOfService
 
     /**
      * @param PlayOfMatch $playOfMatch
-     * @return mixed
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
-    protected function createNextPlayOfNet(PlayOfMatch $playOfMatch)
+    protected function createNextPlayOfNet(PlayOfMatch $playOfMatch): void
     {
         $pastMatches = $this->playOfMatchRepository->getCurrentStepMatches($playOfMatch);
         $nextStep = $this->playOfStepsRepository->getNextPlayOfStep($playOfMatch->getPlayOfStep());
         $newMatches = [];
 
-        for ($i=0; $i < $nextStep->getMatchCount(); $i+=2) {
+        for ($i=0; $i < $nextStep->getMatchCount(); $i++) {
+            $k = $i * 2;
             $newMatch = new PlayOfMatch();
 
-            $newMatch->setTeamA(MatchHelper::getWinnerInPlayOff($pastMatches[$i]));
-            $newMatch->setTeamB(MatchHelper::getWinnerInPlayOff($pastMatches[$i+1]));
+            $newMatch->setTeamA(MatchHelper::getWinnerInPlayOff($pastMatches[$k]));
+            $newMatch->setTeamB(MatchHelper::getWinnerInPlayOff($pastMatches[$k+1]));
+            $newMatch->setMatchPos($i + 1);
             $newMatch->setCreated(new DateTime());
             $newMatch->setPlayOfStep($nextStep);
 
-            $newMatches = $newMatch;
+            $newMatches[] = $newMatch;
         }
 
-        dd($newMatches);
+        $this->playOfMatchRepository->massSave($newMatches);
     }
 }

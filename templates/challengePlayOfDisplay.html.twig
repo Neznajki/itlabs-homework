@@ -18,9 +18,9 @@
                             {% if match.teamAWin is null %}
                                 <td class="team-part notPlayed"> <button class="matchStart btn btn-success" data-action="{{ path('play_of_match_calculate', { 'matchId': match.id }) }}">VS</button> </td>
                             {% elseif match.teamAWin %}
-                                <td class="team-part teamAWin"> < </td>
+                                <td class="team-part teamAWin"> > </td>
                             {% else %}
-                                <td class="team-part teamBWin"> > </td>
+                                <td class="team-part teamBWin"> < </td>
                             {% endif %}
                             <td class="team-part teamB">{{ match.teamB.team.name }}</td>
                         </tr>
