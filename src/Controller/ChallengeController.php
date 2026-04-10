@@ -14,17 +14,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Exception\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class ChallengeController extends AbstractController
 {
-
-    /**
-     * @Route("/challenge/division/dispaly/{challengeId}", name="challenge_division_display")
-     * @param ChallengeService $challengeService
-     * @param int $challengeId
-     * @return Response
-     */
+    #[Route('/challenge/division/dispaly/{challengeId}', name:'challenge_division_display')]
     public function displayDivisionAction(ChallengeService $challengeService, int $challengeId): Response
     {
         return $this->render(
@@ -37,14 +31,7 @@ class ChallengeController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/challenge/play/of/dispaly/{challengeId}", name="challenge_play_of_display")
-     * @param ChallengeService $challengeService
-     * @param int $challengeId
-     * @return Response
-     * @throws ORMException
-     * @throws OptimisticLockException
-     */
+    #[Route('/challenge/play/of/dispaly/{challengeId}', name:'challenge_play_of_display')]
     public function displayPlayOfAction(ChallengeService $challengeService, int $challengeId): Response
     {
         return $this->render('challengePlayOfDisplay.html.twig', [
@@ -53,12 +40,7 @@ class ChallengeController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/challenge/create", name="challenge_create")
-     * @param PlayOfStepsRepository $playOfStepsRepository
-     * @param TeamRepository $teamRepository
-     * @return Response
-     */
+    #[Route('/challenge/create', name:'challenge_create')]
     public function createNewAction(
         PlayOfStepsRepository $playOfStepsRepository,
         TeamRepository $teamRepository
@@ -73,14 +55,7 @@ class ChallengeController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/challenge/start/{playOfId}", name="challenge_start")
-     * @param ChallengeService $challengeService
-     * @param int $playOfId
-     * @return JsonResponse
-     * @throws ORMException
-     * @throws OptimisticLockException
-     */
+    #[Route('/challenge/start/{playOfId}', name:'challenge_start')]
     public function startAction(ChallengeService $challengeService, int $playOfId): JsonResponse
     {
         if (empty($_REQUEST['teams'])) {
