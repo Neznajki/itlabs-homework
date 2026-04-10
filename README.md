@@ -30,4 +30,5 @@ docker compose exec tournament-service php bin/console doctrine:migrations:migra
 * fixed dockerfile 1h
 * fixed routing 10m
 * reworked Entity Annotation to attributes by AI 10m
-* try to fix DB connection 40m
+* fixed everything to working state 1h
+* added migrartion execution update of readme 10m.

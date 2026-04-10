@@ -45,7 +45,7 @@ class Division implements JsonSerializable
         return $this->getName();
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'id' => $this->getId(),
