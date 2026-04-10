@@ -73,4 +73,3 @@ WORKDIR ${APACHE_DOCUMENT_ROOT}
 USER developer
 
 EXPOSE 80
-ENTRYPOINT ["/usr/local/bin/apache_root_config.sh"]
