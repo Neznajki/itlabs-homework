@@ -8,6 +8,7 @@ docker run -d --name local_network -p 80:80 -p 443:443 --restart always --net lo
 * execute and prepare container.
 ```shell
 docker-compose up -d
+docker compose exec tournament-service composer install
 docker compose exec tournament-service php bin/console doctrine:migrations:migrate --no-interaction
 
 ```
