@@ -1,41 +1,35 @@
-FROM ubuntu:18.04
+FROM php:8.3-apache
 MAINTAINER Maris Locmelis
 
 RUN rm -f /etc/localtime
 RUN ln -s /usr/share/zoneinfo/UTC /etc/localtime
 
-RUN apt-get update && apt-get install software-properties-common wget unzip curl -y
-
-RUN LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/php &&\
-    apt-get update && apt-get install -y \
-      apt-utils \
-      apache2 \
-      sudo \
-      iputils-ping \
-      git
-
-RUN apt-get install -y \
-      php7.4-cli \
-      libapache2-mod-php7.4 \
-      php7.4-json \
-      php7.4-mbstring \
-      php7.4-mysql \
-      php7.4-opcache \
-      php7.4-xml \
-      php7.4-curl \
-      php7.4-bcmath \
-      php7.4-xdebug \
-      php7.4-xmlrpc \
-      php7.4-xsl \
-      php7.4-zip \
-      php7.4-intl \
-      php-redis
+RUN apt-get update && apt-get install -y \
+    libzip-dev \
+    unzip \
+    git \
+    curl \
+    libicu-dev \
+    libxml2-dev \
+    libonig-dev \
+    libxslt-dev \
+    libpq-dev \
+    && docker-php-ext-install \
+        pdo \
+        pdo_mysql \
+        mbstring \
+        intl \
+        xml \
+        xsl \
+        bcmath \
+        opcache \
+        zip
 
 ENV USER=developer USER_ID=1000 USER_GID=1000
 
 #install latest composer
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
-    php -r "if (hash_file('sha384', 'composer-setup.php') === 'e5325b19b381bfd88ce90a5ddb7823406b2a38cff6bb704b0acc289a09c8128d4a8ce2bbafcd1fcbdc38666422fe2806') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" && \
+    php -r "if (hash_file('sha384', 'composer-setup.php') === 'c8b085408188070d5f52bcfe4ecfbee5f727afa458b2573b8eaaf77b3419b0bf2768dc67c86944da1544f06fa544fd47') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" && \
     php composer-setup.php --install-dir=/usr/local/bin --filename=composer && \
     php -r "unlink('composer-setup.php');"
 
@@ -63,6 +57,7 @@ ENV APACHE_DOCUMENT_ROOT=/www/default
 COPY conf/apache/apache2.conf /etc/apache2/apache2.conf
 COPY conf/apache/apache_default /etc/apache2/sites-available/000-default.conf
 COPY conf/apache/apache_status.conf /etc/apache2/mods-enabled/status.conf
+COPY conf/php/local_dockerfile.ini  /usr/local/etc/php/conf.d/custom.ini
 COPY apache_root_config.sh /usr/local/bin/apache_root_config.sh
 RUN chmod +x /usr/local/bin/apache_root_config.sh && \
     chmod +x /usr/local/bin/composer && \
@@ -73,25 +68,6 @@ RUN chmod +x /usr/local/bin/apache_root_config.sh && \
 
 RUN a2enmod rewrite
 RUN a2enmod vhost_alias
-
-RUN sed -ri 's/^display_errors\s*=\s*Off/display_errors = On/g' /etc/php/7.4/apache2/php.ini && \
-    sed -ri 's/^display_errors\s*=\s*Off/display_errors = On/g' /etc/php/7.4/cli/php.ini && \
-    sed -ri "s/^error_reporting\s*=.*$//g" /etc/php/7.4/apache2/php.ini && \
-    sed -ri "s/^error_reporting\s*=.*$//g" /etc/php/7.4/cli/php.ini && \
-    echo "error_reporting = E_ALL" >> /etc/php/7.4/apache2/php.ini && \
-    echo "error_reporting = E_ALL" >> /etc/php/7.4/cli/php.ini && \
-    echo "xdebug.var_display_max_depth = 10" >> /etc/php/7.4/apache2/php.ini && \
-    echo "xdebug.profiler_enable = 0" >> /etc/php/7.4/apache2/php.ini && \
-    echo "xdebug.profiler_enable_trigger = 1" >> /etc/php/7.4/apache2/php.ini && \
-    echo "xdebug.profiler_output_dir = \"/opt/xdebug\"" >> /etc/php/7.4/apache2/php.ini && \
-    echo "xdebug.idekey = \"debug\"" >> /etc/php/7.4/apache2/php.ini && \
-    echo "xdebug.idekey = \"debug\"" >> /etc/php/7.4/cli/php.ini && \
-    echo "xdebug.var_display_max_depth = 10" >> /etc/php/7.4/cli/php.ini && \
-    echo "xdebug.profiler_output_dir = \"/opt/xdebug\"" >> /etc/php/7.4/cli/php.ini && \
-    echo 'xdebug.remote_autostart = 1' >> /etc/php/7.4/apache2/php.ini && \
-    echo 'xdebug.remote_enable = 1' >> /etc/php/7.4/apache2/php.ini && \
-    echo 'xdebug.remote_connect_back = 1' >> /etc/php/7.4/apache2/php.ini && \
-    phpenmod intl
 
 WORKDIR ${APACHE_DOCUMENT_ROOT}
 USER developer

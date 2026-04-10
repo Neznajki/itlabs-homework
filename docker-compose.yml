@@ -50,8 +50,3 @@ services:
         volumes:
             - /docker-common-meta-files/mysql/tournament:/var/lib/mysql:cached
             # please define cache folder for database metadata (to preserve state)
-
-networks:
-    default:
-        external:
-            name: local.net
