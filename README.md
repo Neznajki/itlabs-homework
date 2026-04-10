@@ -21,3 +21,6 @@ docker run -d --name local_network -p 80:80 -p 443:443 --restart always --net lo
 # estimates for upgrading.
 * setup PHP + composer 30m
 * upgrade composer PHP + Symfony. 1h
+* fixed dockerfile 1h
+* fixed routing 10m
+* reworked Entity Annotation to attributes by AI 10m

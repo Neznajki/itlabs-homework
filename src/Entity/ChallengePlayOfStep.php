@@ -4,41 +4,30 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * ChallengePlayOfStep
- *
- * @ORM\Table(name="challenge_play_of_step", uniqueConstraints={@ORM\UniqueConstraint(name="challenge_play_of_step_challenge_id_uindex", columns={"challenge_id"})}, indexes={@ORM\Index(name="challenge_play_of_step_play_of_steps_id_fk", columns={"play_of_step_id"})})
- * @ORM\Entity(repositoryClass="App\Repository\ChallengePlayOfStepRepository")
- */
+#[ORM\Table(name: 'challenge_play_of_step', uniqueConstraints: [new ORM\UniqueConstraint(name: 'challenge_play_of_step_challenge_id_uindex', columns: ['challenge_id'])], indexes: [new ORM\Index(name: 'challenge_play_of_step_play_of_steps_id_fk', columns: ['play_of_step_id'])])]
+#[ORM\Entity(repositoryClass: \App\Repository\ChallengePlayOfStepRepository::class)]
 class ChallengePlayOfStep
 {
     /**
      * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'id', type: 'integer', nullable: false)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
 
     /**
      * @var Challenge
-     *
-     * @ORM\ManyToOne(targetEntity="Challenge")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="challenge_id", referencedColumnName="id")
-     * })
      */
+    #[ORM\ManyToOne(targetEntity: Challenge::class)]
+    #[ORM\JoinColumn(name: 'challenge_id', referencedColumnName: 'id')]
     private $challenge;
 
     /**
      * @var PlayOfSteps
-     *
-     * @ORM\ManyToOne(targetEntity="PlayOfSteps")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="play_of_step_id", referencedColumnName="id")
-     * })
      */
+    #[ORM\ManyToOne(targetEntity: PlayOfSteps::class)]
+    #[ORM\JoinColumn(name: 'play_of_step_id', referencedColumnName: 'id')]
     private $playOfStep;
 
     public function getId(): ?int

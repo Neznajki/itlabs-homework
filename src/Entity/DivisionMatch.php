@@ -7,62 +7,48 @@ use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use JsonSerializable;
 
-/**
- * DivisionMatch
- *
- * @ORM\Table(name="division_match", uniqueConstraints={@ORM\UniqueConstraint(name="division_match_pk", columns={"team_a_id", "team_b_id"})}, indexes={@ORM\Index(name="division_match_challenge_division_team_id_fk_2", columns={"team_b_id"}), @ORM\Index(name="IDX_531F211BEA3FA723", columns={"team_a_id"})})
- * @ORM\Entity(repositoryClass="App\Repository\DivisionMatchRepository")
- */
+#[ORM\Table(name: 'division_match', uniqueConstraints: [new ORM\UniqueConstraint(name: 'division_match_pk', columns: ['team_a_id', 'team_b_id'])], indexes: [new ORM\Index(name: 'division_match_challenge_division_team_id_fk_2', columns: ['team_b_id']), new ORM\Index(name: 'IDX_531F211BEA3FA723', columns: ['team_a_id'])])]
+#[ORM\Entity(repositoryClass: \App\Repository\DivisionMatchRepository::class)]
 class DivisionMatch implements JsonSerializable
 {
     /**
      * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'id', type: 'integer', nullable: false)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
 
     /**
      * @var bool|null
-     *
-     * @ORM\Column(name="team_a_win", type="boolean", nullable=true)
      */
+    #[ORM\Column(name: 'team_a_win', type: 'boolean', nullable: true)]
     private $teamAWin;
 
     /**
      * @var DateTime|null
-     *
-     * @ORM\Column(name="created", type="datetime", nullable=true)
      */
+    #[ORM\Column(name: 'created', type: 'datetime', nullable: true)]
     private $created;
 
     /**
      * @var DateTime|null
-     *
-     * @ORM\Column(name="resulted", type="datetime", nullable=true)
      */
+    #[ORM\Column(name: 'resulted', type: 'datetime', nullable: true)]
     private $resulted;
 
     /**
      * @var ChallengeDivisionTeam
-     *
-     * @ORM\ManyToOne(targetEntity="ChallengeDivisionTeam")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="team_a_id", referencedColumnName="id")
-     * })
      */
+    #[ORM\ManyToOne(targetEntity: ChallengeDivisionTeam::class)]
+    #[ORM\JoinColumn(name: 'team_a_id', referencedColumnName: 'id')]
     private $teamA;
 
     /**
      * @var ChallengeDivisionTeam
-     *
-     * @ORM\ManyToOne(targetEntity="ChallengeDivisionTeam")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="team_b_id", referencedColumnName="id")
-     * })
      */
+    #[ORM\ManyToOne(targetEntity: ChallengeDivisionTeam::class)]
+    #[ORM\JoinColumn(name: 'team_b_id', referencedColumnName: 'id')]
     private $teamB;
 
     public function getId(): ?int

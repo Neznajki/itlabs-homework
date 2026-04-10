@@ -5,35 +5,28 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use JsonSerializable;
 
-/**
- * PlayOfSteps
- *
- * @ORM\Table(name="play_of_steps", uniqueConstraints={@ORM\UniqueConstraint(name="play_of_steps_pk_2", columns={"name"}), @ORM\UniqueConstraint(name="play_of_steps_name_uindex", columns={"name"})})
- * @ORM\Entity(repositoryClass="App\Repository\PlayOfStepsRepository")
- */
+#[ORM\Table(name: 'play_of_steps', uniqueConstraints: [new ORM\UniqueConstraint(name: 'play_of_steps_pk_2', columns: ['name']), new ORM\UniqueConstraint(name: 'play_of_steps_name_uindex', columns: ['name'])])]
+#[ORM\Entity(repositoryClass: \App\Repository\PlayOfStepsRepository::class)]
 class PlayOfSteps implements JsonSerializable
 {
     /**
      * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'id', type: 'integer', nullable: false)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=32, nullable=false)
      */
+    #[ORM\Column(name: 'name', type: 'string', length: 32, nullable: false)]
     private $name;
 
     /**
      * @var int
-     *
-     * @ORM\Column(name="match_count", type="integer", nullable=false)
      */
+    #[ORM\Column(name: 'match_count', type: 'integer', nullable: false)]
     private $matchCount;
 
     public function getId(): ?int
