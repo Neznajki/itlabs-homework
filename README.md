@@ -17,3 +17,7 @@ docker run -d --name local_network -p 80:80 -p 443:443 --restart always --net lo
 * creating division match calculation logic 4h
 * first play of initiation 4h
 * play of logic handle init tests and make some fixes 3h
+
+# estimates for upgrading.
+* setup PHP + composer 30m
+* upgrade composer PHP + Symfony. 1h
