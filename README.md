@@ -1,10 +1,16 @@
 # installation
 * echo '127.0.0.1 tournament-service.local.net' | sudo tee -a /etc/hosts
+* setup network
 ```shell script
 docker network create local.net 
 docker run -d --name local_network -p 80:80 -p 443:443 --restart always --net local.net -v /var/run/docker.sock:/tmp/docker.sock:ro -v .docker/certs:/etc/nginx/certs/:ro jwilder/nginx-proxy:latest
 ```
-* docker-compose up -d
+* execute and prepare container.
+```shell
+docker-compose up -d
+docker compose exec tournament-service php bin/console doctrine:migrations:migrate --no-interaction
+
+```
 * go to >> http://tournament-service.local.net/
 
 # estimates
@@ -23,4 +29,5 @@ docker run -d --name local_network -p 80:80 -p 443:443 --restart always --net lo
 * upgrade composer PHP + Symfony. 1h
 * fixed dockerfile 1h
 * fixed routing 10m
-* reworked Entity Annotation to attributes by 
+* reworked Entity Annotation to attributes by AI 10m
+* try to fix DB connection 40m
