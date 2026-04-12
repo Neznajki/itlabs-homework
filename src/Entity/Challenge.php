@@ -7,35 +7,28 @@ use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use JsonSerializable;
 
-/**
- * Challenge
- *
- * @ORM\Table(name="challenge", uniqueConstraints={@ORM\UniqueConstraint(name="challenge_name_uindex", columns={"name"})})
- * @ORM\Entity(repositoryClass="App\Repository\ChallengeRepository")
- */
+#[ORM\Table(name: 'challenge', uniqueConstraints: [new ORM\UniqueConstraint(name: 'challenge_name_uindex', columns: ['name'])])]
+#[ORM\Entity(repositoryClass: \App\Repository\ChallengeRepository::class)]
 class Challenge implements JsonSerializable
 {
     /**
      * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'id', type: 'integer', nullable: false)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
 
     /**
      * @var string|null
-     *
-     * @ORM\Column(name="name", type="string", nullable=true)
      */
+    #[ORM\Column(name: 'name', type: 'string', nullable: true)]
     private $name;
 
     /**
      * @var DateTime|null
-     *
-     * @ORM\Column(name="created", type="datetime", nullable=true)
      */
+    #[ORM\Column(name: 'created', type: 'datetime', nullable: true)]
     private $created;
 
     public function getId(): ?int

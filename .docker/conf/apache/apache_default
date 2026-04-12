@@ -1,8 +1,8 @@
 <VirtualHost *:80>
     ServerAdmin webmaster@localhost
 
-    DocumentRoot {{ APACHE_DOCUMENT_ROOT }}
-    <Directory {{ APACHE_DOCUMENT_ROOT }}>
+    DocumentRoot /www/default/public
+    <Directory /www/default/public>
         AllowOverride All
 
         Require all granted

@@ -7,79 +7,61 @@ use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use JsonSerializable;
 
-/**
- * PlayOfMatch
- *
- * @ORM\Table(name="play_of_match", uniqueConstraints={@ORM\UniqueConstraint(name="play_of_match_pk_2", columns={"team_a_id", "team_b_id"})}, indexes={@ORM\Index(name="play_of_match_play_of_steps_id_fk", columns={"play_of_step_id"}), @ORM\Index(name="play_of_match_challenge_division_team_id_fk_2", columns={"team_b_id"}), @ORM\Index(name="IDX_E393170EA3FA723", columns={"team_a_id"})})
- * @ORM\Entity(repositoryClass="App\Repository\PlayOfMatchRepository")
- */
+#[ORM\Table(name: 'play_of_match', uniqueConstraints: [new ORM\UniqueConstraint(name: 'play_of_match_pk_2', columns: ['team_a_id', 'team_b_id'])], indexes: [new ORM\Index(name: 'play_of_match_play_of_steps_id_fk', columns: ['play_of_step_id']), new ORM\Index(name: 'play_of_match_challenge_division_team_id_fk_2', columns: ['team_b_id']), new ORM\Index(name: 'IDX_E393170EA3FA723', columns: ['team_a_id'])])]
+#[ORM\Entity(repositoryClass: \App\Repository\PlayOfMatchRepository::class)]
 class PlayOfMatch implements JsonSerializable
 {
     /**
      * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'id', type: 'integer', nullable: false)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
 
     /**
      * @var bool|null
-     *
-     * @ORM\Column(name="team_a_win", type="boolean", nullable=true)
      */
+    #[ORM\Column(name: 'team_a_win', type: 'boolean', nullable: true)]
     private $teamAWin;
 
     /**
      * @var int
-     *
-     * @ORM\Column(name="match_pos", type="integer", nullable=false)
      */
+    #[ORM\Column(name: 'match_pos', type: 'integer', nullable: false)]
     private $matchPos;
 
     /**
      * @var DateTime|null
-     *
-     * @ORM\Column(name="created", type="datetime", nullable=true)
      */
+    #[ORM\Column(name: 'created', type: 'datetime', nullable: true)]
     private $created;
 
     /**
      * @var DateTime|null
-     *
-     * @ORM\Column(name="resulted", type="datetime", nullable=true)
      */
+    #[ORM\Column(name: 'resulted', type: 'datetime', nullable: true)]
     private $resulted;
 
     /**
      * @var ChallengeDivisionTeam
-     *
-     * @ORM\ManyToOne(targetEntity="ChallengeDivisionTeam")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="team_a_id", referencedColumnName="id")
-     * })
      */
+    #[ORM\ManyToOne(targetEntity: ChallengeDivisionTeam::class)]
+    #[ORM\JoinColumn(name: 'team_a_id', referencedColumnName: 'id')]
     private $teamA;
 
     /**
      * @var ChallengeDivisionTeam
-     *
-     * @ORM\ManyToOne(targetEntity="ChallengeDivisionTeam")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="team_b_id", referencedColumnName="id")
-     * })
      */
+    #[ORM\ManyToOne(targetEntity: ChallengeDivisionTeam::class)]
+    #[ORM\JoinColumn(name: 'team_b_id', referencedColumnName: 'id')]
     private $teamB;
 
     /**
      * @var PlayOfSteps
-     *
-     * @ORM\ManyToOne(targetEntity="PlayOfSteps")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="play_of_step_id", referencedColumnName="id")
-     * })
      */
+    #[ORM\ManyToOne(targetEntity: PlayOfSteps::class)]
+    #[ORM\JoinColumn(name: 'play_of_step_id', referencedColumnName: 'id')]
     private $playOfStep;
 
     public function getId(): ?int

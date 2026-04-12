@@ -11,30 +11,17 @@ use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class TeamController extends AbstractController
 {
-    /**
-     * @Route("/team/list", name="team_list")
-     * @param TeamRepository $teamRepository
-     * @return Response
-     */
+    #[Route('/team/list', name:'team_list')]
     public function listAction(TeamRepository $teamRepository)
     {
         return $this->render('teamList.html.twig', ['title' => 'team list', 'list' => $teamRepository->findAll()]);
     }
 
-    /**
-     * @Route("/team/add/{name}/{strength}", name="team_add")
-     * @param TeamService $teamService
-     * @param string $name
-     * @param int $strength
-     * @return JsonResponse
-     * @throws ORMException
-     * @throws OptimisticLockException
-     */
+    #[Route('/team/add/{name}/{strength}', name:'team_add')]
     public function addAction(TeamService $teamService, string $name, int $strength): JsonResponse
     {
         try {
